@@ -3,373 +3,434 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paris Metro Marathon - 406 Stops Challenge</title>
+    <title>Paris Metro Project | 406 Stops</title>
     <style>
-        /* --- STILE BASE & RATP VIBES --- */
+        /* --- FONTS & RESET --- */
         :root {
-            --ratp-bg: #f5f5f5;
-            --ratp-dark: #1a1a1a;
-            --ratp-blue: #0055c8; /* Colore RATP istituzionale */
-            --ratp-jade: #00aca9; /* Colore Île-de-France Mobilités */
+            --ratp-blue-dark: #0a0082; /* Blu scuro dei cartelli stazione */
+            --ratp-bg: #f1f1f1;
+            --font-stack: 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
 
         body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-family: var(--font-stack);
             background-color: var(--ratp-bg);
-            color: var(--ratp-dark);
             margin: 0;
             padding: 0;
+            color: #333;
         }
 
-        /* --- HEADER --- */
+        /* --- HEADER STYLE "PLAQUE DE GARE" --- */
         header {
-            background: linear-gradient(135deg, var(--ratp-blue) 0%, var(--ratp-jade) 100%);
+            background-color: var(--ratp-blue-dark);
             color: white;
-            padding: 2rem 1rem;
+            padding: 1.5rem 1rem;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
+            border-bottom: 6px solid #fff; /* Bordo bianco tipico */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
-        h1 {
-            margin: 0;
-            font-size: 1.8rem;
+        .logos-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 800px;
+            margin: 0 auto 1rem auto;
+            padding: 0 10px;
+        }
+
+        .logo-svg {
+            height: 40px;
+            width: auto;
+        }
+
+        .header-content h1 {
             font-weight: 700;
-            letter-spacing: -0.5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 0;
+            font-size: 1.5rem;
+            line-height: 1.2;
         }
 
-        p.subtitle {
-            margin-top: 0.5rem;
-            opacity: 0.9;
+        .header-content .subtitle {
             font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 5px;
+            font-weight: 300;
         }
 
-        .counter-badge {
-            background: white;
-            color: var(--ratp-blue);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-weight: bold;
+        .counter-box {
+            background: #FFCE00; /* Giallo Metro */
+            color: black;
             display: inline-block;
-            margin-top: 10px;
+            padding: 5px 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
 
-        /* --- CONTAINER --- */
+        /* --- MAIN CONTAINER --- */
         .container {
-            max-width: 600px;
-            margin: 2rem auto;
-            padding: 0 1rem;
+            max-width: 700px;
+            margin: 20px auto;
+            padding: 0 15px;
         }
 
-        /* --- LINEA METRO (ACCORDION) --- */
-        .metro-line-wrapper {
-            margin-bottom: 1rem;
-            border-radius: 12px;
-            overflow: hidden;
+        /* --- METRO LINE CARD --- */
+        .metro-line {
             background: white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transition: transform 0.2s;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            transition: all 0.2s ease;
         }
 
-        .metro-line-wrapper:hover {
-            transform: translateY(-2px);
+        .metro-line:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
 
         .line-header {
             display: flex;
             align-items: center;
-            padding: 1rem;
+            padding: 15px;
             cursor: pointer;
-            background: white;
-            border-bottom: 1px solid transparent;
+            user-select: none;
         }
 
-        /* Cerchio col numero della linea */
-        .line-badge {
-            width: 40px;
-            height: 40px;
+        /* Il cerchio del numero linea */
+        .line-circle {
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white; /* Default text color, changed per line if needed */
-            font-weight: bold;
-            font-size: 1.2rem;
+            font-weight: 900; /* Boldissimo come RATP */
+            font-size: 1.3rem;
             margin-right: 15px;
-            border: 2px solid rgba(0,0,0,0.1);
             flex-shrink: 0;
+            /* Border 'inset' per effetto adesivo */
+            box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1); 
         }
 
-        .line-info {
+        .line-details {
             flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
 
-        .line-title {
-            font-weight: bold;
-            font-size: 1.1rem;
-            display: block;
+        .line-name {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #222;
         }
 
-        .line-stops-count {
-            font-size: 0.8rem;
+        .line-route {
+            font-size: 0.85rem;
             color: #666;
+            margin-top: 2px;
         }
 
-        .arrow {
-            transition: transform 0.3s ease;
-            opacity: 0.5;
+        .chevron {
+            width: 24px;
+            height: 24px;
+            transition: transform 0.3s;
+            opacity: 0.4;
         }
 
-        .metro-line-wrapper.active .arrow {
+        .metro-line.active .chevron {
             transform: rotate(180deg);
         }
 
-        /* --- LISTA FERMATE --- */
-        .stops-list {
+        /* --- STOPS LIST --- */
+        .stops-container {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.4s ease-out;
-            background-color: #fafafa;
+            background-color: #fdfdfd;
+            border-top: 1px solid #eee;
         }
 
-        .stops-list ul {
+        .stops-list {
             list-style: none;
             padding: 0;
             margin: 0;
         }
 
-        .stops-list li {
+        .stop-item {
             padding: 12px 20px;
-            border-bottom: 1px solid #eee;
-            font-size: 0.95rem;
+            border-bottom: 1px solid #f0f0f0;
             display: flex;
             align-items: center;
+            font-size: 0.9rem;
         }
 
-        .stops-list li:last-child {
-            border-bottom: none;
+        /* Decorazione della linea verticale stile mappa */
+        .stop-item::before {
+            content: '';
+            display: block;
+            width: 6px;
+            height: 6px;
+            background: #333;
+            border-radius: 50%;
+            margin-right: 15px;
         }
 
         .stop-number {
+            margin-left: auto;
+            font-size: 0.75rem;
+            color: #999;
             font-family: monospace;
             background: #eee;
-            color: #555;
             padding: 2px 6px;
             border-radius: 4px;
-            margin-right: 10px;
-            font-size: 0.8rem;
-            min-width: 30px;
-            text-align: center;
         }
-
-        /* --- COLORI UFFICIALI METRO PARIS (CSS Variables generated in JS) --- */
     </style>
 </head>
 <body>
 
 <header>
-    <h1>Paris Metro Marathon</h1>
-    <p class="subtitle">Progetto Social & Esplorazione Urbana</p>
-    <div class="counter-badge">Obiettivo: <span id="total-stops-display">0</span> Fermate</div>
+    <div class="logos-container">
+        <svg class="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 50 C 20 30 70 20 80 50 C 70 80 20 70 20 50" stroke="white" stroke-width="8" fill="none"/>
+            <circle cx="50" cy="50" r="45" stroke="white" stroke-width="2"/>
+            <text x="50" y="55" font-family="Arial" font-weight="bold" font-size="14" fill="white" text-anchor="middle">IDFM</text>
+        </svg>
+
+        <svg class="logo-svg" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+             <circle cx="30" cy="30" r="25" fill="#00A4A9"/> <path d="M15 30 L30 15 L45 30" stroke="white" stroke-width="5" fill="none"/> <text x="70" y="40" font-family="Arial" font-weight="900" font-size="35" fill="#00A4A9">RATP</text>
+        </svg>
+    </div>
+
+    <div class="header-content">
+        <h1>Paris Metro Challenge</h1>
+        <div class="subtitle">Progetto Social & Esplorazione</div>
+        <div class="counter-box">OBIETTIVO: <span id="total-count">0</span> FERMATE</div>
+    </div>
 </header>
 
 <div class="container" id="app">
     </div>
 
 <script>
-    // --- DATABASE DELLE LINEE E DEI COLORI ---
-    // NOTA: Ho inserito alcune fermate di esempio. 
-    // Per il progetto completo, dovrai incollare qui la lista completa delle stazioni.
+    // --- DATI UFFICIALI (Aggiornati 2024 - Extension L11 & L14 incluse) ---
+    // Colori RATP ufficiali esadecimali
     
-    const metroData = [
-        { 
-            id: "1", 
-            color: "#FFCD00", 
-            textColor: "#1a1a1a", // Il giallo è chiaro, serve testo scuro
-            name: "La Défense ↔ Château de Vincennes", 
-            stops: ["La Défense", "Esplanade de la Défense", "Pont de Neuilly", "Les Sablons", "Porte Maillot", "Argentine", "Charles de Gaulle – Étoile", "George V", "Franklin D. Roosevelt", "Champs-Élysées – Clemenceau", "Concorde", "Tuileries", "Palais Royal – Musée du Louvre", "Louvre – Rivoli", "Châtelet", "Hôtel de Ville", "Saint-Paul", "Bastille", "Gare de Lyon", "Reuilly – Diderot", "Nation", "Porte de Vincennes", "Saint-Mandé", "Bérault", "Château de Vincennes"] 
+    const lines = [
+        {
+            id: "1",
+            color: "#FFCD00",
+            text: "#000000",
+            route: "La Défense ↔ Château de Vincennes",
+            stops: ["La Défense", "Esplanade de la Défense", "Pont de Neuilly", "Les Sablons", "Porte Maillot", "Argentine", "Charles de Gaulle – Étoile", "George V", "Franklin D. Roosevelt", "Champs-Élysées – Clemenceau", "Concorde", "Tuileries", "Palais Royal – Musée du Louvre", "Louvre – Rivoli", "Châtelet", "Hôtel de Ville", "Saint-Paul", "Bastille", "Gare de Lyon", "Reuilly – Diderot", "Nation", "Porte de Vincennes", "Saint-Mandé", "Bérault", "Château de Vincennes"]
         },
-        { 
-            id: "2", 
-            color: "#003CA6", 
-            textColor: "#ffffff",
-            name: "Porte Dauphine ↔ Nation", 
-            stops: ["Porte Dauphine", "Victor Hugo", "Charles de Gaulle – Étoile", "Ternes", "Courcelles", "Monceau", "Villiers", "Rome", "Place de Clichy", "Blanche", "Pigalle", "Anvers", "Barbès – Rochechouart", "La Chapelle", "Stalingrad", "Jaurès", "Colonel Fabien", "Belleville", "Couronnes", "Ménilmontant", "Père Lachaise", "Philippe Auguste", "Alexandre Dumas", "Avron", "Nation"] 
+        {
+            id: "2",
+            color: "#003CA6",
+            text: "#FFFFFF",
+            route: "Porte Dauphine ↔ Nation",
+            stops: ["Porte Dauphine", "Victor Hugo", "Charles de Gaulle – Étoile", "Ternes", "Courcelles", "Monceau", "Villiers", "Rome", "Place de Clichy", "Blanche", "Pigalle", "Anvers", "Barbès – Rochechouart", "La Chapelle", "Stalingrad", "Jaurès", "Colonel Fabien", "Belleville", "Couronnes", "Ménilmontant", "Père Lachaise", "Philippe Auguste", "Alexandre Dumas", "Avron", "Nation"]
         },
-        { 
-            id: "3", 
-            color: "#837902", 
-            textColor: "#ffffff",
-            name: "Pont de Levallois ↔ Gallieni", 
-            stops: ["Pont de Levallois – Bécon", "Anatole France", "Louise Michel", "Porte de Champerret", "Pereire", "Wagram", "Malesherbes", "Villiers", "Europe", "Saint-Lazare", "Havre – Caumartin", "Opéra", "Quatre-Septembre", "Bourse", "Sentier", "Réaumur – Sébastopol", "Arts et Métiers", "Temple", "République", "Parmentier", "Rue Saint-Maur", "Père Lachaise", "Gambetta", "Porte de Bagnolet", "Gallieni"] 
+        {
+            id: "3",
+            color: "#837902",
+            text: "#FFFFFF",
+            route: "Pont de Levallois ↔ Gallieni",
+            stops: ["Pont de Levallois – Bécon", "Anatole France", "Louise Michel", "Porte de Champerret", "Pereire", "Wagram", "Malesherbes", "Villiers", "Europe", "Saint-Lazare", "Havre – Caumartin", "Opéra", "Quatre-Septembre", "Bourse", "Sentier", "Réaumur – Sébastopol", "Arts et Métiers", "Temple", "République", "Parmentier", "Rue Saint-Maur", "Père Lachaise", "Gambetta", "Porte de Bagnolet", "Gallieni"]
         },
-        { 
-            id: "3bis", 
-            color: "#6EC4E8", 
-            textColor: "#1a1a1a",
-            name: "Gambetta ↔ Porte des Lilas", 
-            stops: ["Gambetta", "Pelleport", "Saint-Fargeau", "Porte des Lilas"] 
+        {
+            id: "3bis",
+            color: "#6EC4E8",
+            text: "#000000",
+            route: "Gambetta ↔ Porte des Lilas",
+            stops: ["Gambetta", "Pelleport", "Saint-Fargeau", "Porte des Lilas"]
         },
-        { 
-            id: "4", 
-            color: "#BE418D", 
-            textColor: "#ffffff",
-            name: "Porte de Clignancourt ↔ Bagneux", 
-            stops: ["Porte de Clignancourt", "Simplon", "Marcadet – Poissonniers", "Château Rouge", "Barbès – Rochechouart", "Gare du Nord", "Gare de l'Est", "Château d'Eau", "Strasbourg – Saint-Denis", "Réaumur – Sébastopol", "Étienne Marcel", "Les Halles", "Châtelet", "Cité", "Saint-Michel", "Odéon", "Saint-Germain-des-Prés", "Saint-Sulpice", "Saint-Placide", "Montparnasse – Bienvenüe", "Vavin", "Raspail", "Denfert-Rochereau", "Mouton-Duvernet", "Alésia", "Porte d'Orléans", "Mairie de Montrouge", "Barbara", "Bagneux – Lucie Aubrac"] 
+        {
+            id: "4",
+            color: "#BE418D",
+            text: "#FFFFFF",
+            route: "Porte de Clignancourt ↔ Bagneux",
+            stops: ["Porte de Clignancourt", "Simplon", "Marcadet – Poissonniers", "Château Rouge", "Barbès – Rochechouart", "Gare du Nord", "Gare de l'Est", "Château d'Eau", "Strasbourg – Saint-Denis", "Réaumur – Sébastopol", "Étienne Marcel", "Les Halles", "Châtelet", "Cité", "Saint-Michel", "Odéon", "Saint-Germain-des-Prés", "Saint-Sulpice", "Saint-Placide", "Montparnasse – Bienvenüe", "Vavin", "Raspail", "Denfert-Rochereau", "Mouton-Duvernet", "Alésia", "Porte d'Orléans", "Mairie de Montrouge", "Barbara", "Bagneux – Lucie Aubrac"]
         },
-        { 
-            id: "5", 
-            color: "#F78EB6", 
-            textColor: "#1a1a1a",
-            name: "Bobigny ↔ Place d'Italie", 
-            stops: ["Bobigny – Pablo Picasso", "Bobigny – Pantin – Raymond Queneau", "Église de Pantin", "Hoche", "Porte de Pantin", "Ourcq", "Laumière", "Jaurès", "Stalingrad", "Gare du Nord", "Gare de l'Est", "Jacques Bonsergent", "République", "Oberkampf", "Richard-Lenoir", "Bréguet – Sabin", "Bastille", "Quai de la Rapée", "Gare d'Austerlitz", "Saint-Marcel", "Campo-Formio", "Place d'Italie"] 
+        {
+            id: "5",
+            color: "#F78EB6",
+            text: "#000000",
+            route: "Bobigny ↔ Place d'Italie",
+            stops: ["Bobigny – Pablo Picasso", "Bobigny – Pantin – Raymond Queneau", "Église de Pantin", "Hoche", "Porte de Pantin", "Ourcq", "Laumière", "Jaurès", "Stalingrad", "Gare du Nord", "Gare de l'Est", "Jacques Bonsergent", "République", "Oberkampf", "Richard-Lenoir", "Bréguet – Sabin", "Bastille", "Quai de la Rapée", "Gare d'Austerlitz", "Saint-Marcel", "Campo-Formio", "Place d'Italie"]
         },
-        { 
-            id: "6", 
-            color: "#79BB92", 
-            textColor: "#1a1a1a",
-            name: "Charles de Gaulle – Étoile ↔ Nation", 
-            stops: ["Charles de Gaulle – Étoile", "Kléber", "Boissière", "Trocadéro", "Passy", "Bir-Hakeim", "Dupleix", "La Motte-Picquet – Grenelle", "Cambronne", "Sèvres – Lecourbe", "Pasteur", "Montparnasse – Bienvenüe", "Edgar Quinet", "Raspail", "Denfert-Rochereau", "Saint-Jacques", "Glacière", "Corvisart", "Place d'Italie", "Nationale", "Chevaleret", "Quai de la Gare", "Bercy", "Dugommier", "Daumesnil", "Bel-Air", "Picpus", "Nation"] 
+        {
+            id: "6",
+            color: "#79BB92",
+            text: "#000000",
+            route: "Charles de Gaulle – Étoile ↔ Nation",
+            stops: ["Charles de Gaulle – Étoile", "Kléber", "Boissière", "Trocadéro", "Passy", "Bir-Hakeim", "Dupleix", "La Motte-Picquet – Grenelle", "Cambronne", "Sèvres – Lecourbe", "Pasteur", "Montparnasse – Bienvenüe", "Edgar Quinet", "Raspail", "Denfert-Rochereau", "Saint-Jacques", "Glacière", "Corvisart", "Place d'Italie", "Nationale", "Chevaleret", "Quai de la Gare", "Bercy", "Dugommier", "Daumesnil", "Bel-Air", "Picpus", "Nation"]
         },
-        { 
-            id: "7", 
-            color: "#F28E7E", 
-            textColor: "#1a1a1a",
-            name: "La Courneuve ↔ Villejuif / Mairie d'Ivry", 
-            stops: ["La Courneuve – 8 Mai 1945", "Fort d'Aubervilliers", "Aubervilliers – Pantin – Quatre Chemins", "Porte de la Villette", "Corentin Cariou", "Crimée", "Riquet", "Stalingrad", "Louis Blanc", "Château-Landon", "Gare de l'Est", "Poissonnière", "Cadet", "Le Peletier", "Chaussée d'Antin – La Fayette", "Opéra", "Pyramides", "Palais Royal – Musée du Louvre", "Pont Neuf", "Châtelet", "Pont Marie", "Sully – Morland", "Jussieu", "Place Monge", "Censier – Daubenton", "Les Gobelins", "Place d'Italie", "Tolbiac", "Maison Blanche", "Le Kremlin-Bicêtre", "Villejuif – Léo Lagrange", "Villejuif – Paul Vaillant-Couturier", "Villejuif – Louis Aragon", "Porte d'Italie", "Porte de Choisy", "Porte d'Ivry", "Pierre et Marie Curie", "Mairie d'Ivry"] 
+        {
+            id: "7",
+            color: "#F28E7E",
+            text: "#000000",
+            route: "La Courneuve ↔ Villejuif / Mairie d'Ivry",
+            stops: ["La Courneuve – 8 Mai 1945", "Fort d'Aubervilliers", "Aubervilliers – Pantin – Quatre Chemins", "Porte de la Villette", "Corentin Cariou", "Crimée", "Riquet", "Stalingrad", "Louis Blanc", "Château-Landon", "Gare de l'Est", "Poissonnière", "Cadet", "Le Peletier", "Chaussée d'Antin – La Fayette", "Opéra", "Pyramides", "Palais Royal – Musée du Louvre", "Pont Neuf", "Châtelet", "Pont Marie", "Sully – Morland", "Jussieu", "Place Monge", "Censier – Daubenton", "Les Gobelins", "Place d'Italie", "Tolbiac", "Maison Blanche", "Le Kremlin-Bicêtre", "Villejuif – Léo Lagrange", "Villejuif – Paul Vaillant-Couturier", "Villejuif – Louis Aragon", "Porte d'Italie", "Porte de Choisy", "Porte d'Ivry", "Pierre et Marie Curie", "Mairie d'Ivry"]
         },
-        { 
-            id: "7bis", 
-            color: "#79BB92", 
-            textColor: "#1a1a1a",
-            name: "Louis Blanc ↔ Pré Saint-Gervais", 
-            stops: ["Louis Blanc", "Jaurès", "Bolivar", "Buttes Chaumont", "Botzaris", "Place des Fêtes", "Pré Saint-Gervais", "Danube"] 
+        {
+            id: "7bis",
+            color: "#79BB92",
+            text: "#000000",
+            route: "Louis Blanc ↔ Pré Saint-Gervais",
+            stops: ["Louis Blanc", "Jaurès", "Bolivar", "Buttes Chaumont", "Botzaris", "Place des Fêtes", "Pré Saint-Gervais", "Danube"]
         },
-        { 
-            id: "8", 
-            color: "#C5A3CC", 
-            textColor: "#1a1a1a",
-            name: "Balard ↔ Pointe du Lac", 
-            stops: ["Balard", "Lourmel", "Boucicaut", "Félix Faure", "Commerce", "La Motte-Picquet – Grenelle", "École Militaire", "La Tour-Maubourg", "Invalides", "Concorde", "Madeleine", "Opéra", "Richelieu – Drouot", "Grands Boulevards", "Bonne Nouvelle", "Strasbourg – Saint-Denis", "République", "Filles du Calvaire", "Saint-Sébastien – Froissart", "Chemin Vert", "Bastille", "Ledru-Rollin", "Faidherbe – Chaligny", "Reuilly – Diderot", "Montgallet", "Daumesnil", "Michel Bizot", "Porte Dorée", "Porte de Charenton", "Liberté", "Charenton – Écoles", "École Vétérinaire de Maisons-Alfort", "Maisons-Alfort – Stade", "Maisons-Alfort – Les Juilliottes", "Créteil – L'Échat", "Créteil – Université", "Créteil – Préfecture", "Pointe du Lac"] 
+        {
+            id: "8",
+            color: "#C5A3CC",
+            text: "#000000",
+            route: "Balard ↔ Pointe du Lac",
+            stops: ["Balard", "Lourmel", "Boucicaut", "Félix Faure", "Commerce", "La Motte-Picquet – Grenelle", "École Militaire", "La Tour-Maubourg", "Invalides", "Concorde", "Madeleine", "Opéra", "Richelieu – Drouot", "Grands Boulevards", "Bonne Nouvelle", "Strasbourg – Saint-Denis", "République", "Filles du Calvaire", "Saint-Sébastien – Froissart", "Chemin Vert", "Bastille", "Ledru-Rollin", "Faidherbe – Chaligny", "Reuilly – Diderot", "Montgallet", "Daumesnil", "Michel Bizot", "Porte Dorée", "Porte de Charenton", "Liberté", "Charenton – Écoles", "École Vétérinaire de Maisons-Alfort", "Maisons-Alfort – Stade", "Maisons-Alfort – Les Juilliottes", "Créteil – L'Échat", "Créteil – Université", "Créteil – Préfecture", "Pointe du Lac"]
         },
-        { 
-            id: "9", 
-            color: "#CEC92B", 
-            textColor: "#1a1a1a",
-            name: "Pont de Sèvres ↔ Mairie de Montreuil", 
-            stops: ["Pont de Sèvres", "Billancourt", "Marcel Sembat", "Porte de Saint-Cloud", "Exelmans", "Michel-Ange – Molitor", "Michel-Ange – Auteuil", "Jasmin", "Ranelagh", "La Muette", "Rue de la Pompe", "Trocadéro", "Iéna", "Alma – Marceau", "Franklin D. Roosevelt", "Saint-Philippe du Roule", "Miromesnil", "Saint-Augustin", "Havre – Caumartin", "Chaussée d'Antin – La Fayette", "Richelieu – Drouot", "Grands Boulevards", "Bonne Nouvelle", "Strasbourg – Saint-Denis", "République", "Oberkampf", "Saint-Ambroise", "Voltaire", "Charonne", "Rue des Boulets", "Nation", "Buzenval", "Maraîchers", "Porte de Montreuil", "Robespierre", "Croix de Chavaux", "Mairie de Montreuil"] 
+        {
+            id: "9",
+            color: "#D5C900",
+            text: "#000000",
+            route: "Pont de Sèvres ↔ Mairie de Montreuil",
+            stops: ["Pont de Sèvres", "Billancourt", "Marcel Sembat", "Porte de Saint-Cloud", "Exelmans", "Michel-Ange – Molitor", "Michel-Ange – Auteuil", "Jasmin", "Ranelagh", "La Muette", "Rue de la Pompe", "Trocadéro", "Iéna", "Alma – Marceau", "Franklin D. Roosevelt", "Saint-Philippe du Roule", "Miromesnil", "Saint-Augustin", "Havre – Caumartin", "Chaussée d'Antin – La Fayette", "Richelieu – Drouot", "Grands Boulevards", "Bonne Nouvelle", "Strasbourg – Saint-Denis", "République", "Oberkampf", "Saint-Ambroise", "Voltaire", "Charonne", "Rue des Boulets", "Nation", "Buzenval", "Maraîchers", "Porte de Montreuil", "Robespierre", "Croix de Chavaux", "Mairie de Montreuil"]
         },
-        { 
-            id: "10", 
-            color: "#DFB039", 
-            textColor: "#1a1a1a",
-            name: "Boulogne ↔ Gare d'Austerlitz", 
-            stops: ["Boulogne – Pont de Saint-Cloud", "Boulogne – Jean Jaurès", "Porte d'Auteuil", "Michel-Ange – Molitor", "Michel-Ange – Auteuil", "Chardon-Lagache", "Mirabeau", "Église d'Auteuil", "Javel – André Citroën", "Charles Michels", "Avenue Émile Zola", "La Motte-Picquet – Grenelle", "Ségur", "Duroc", "Vaneau", "Sèvres – Babylone", "Mabillon", "Odéon", "Cluny – La Sorbonne", "Maubert – Mutualité", "Cardinal Lemoine", "Jussieu", "Gare d'Austerlitz"] 
+        {
+            id: "10",
+            color: "#E3B32A",
+            text: "#000000",
+            route: "Boulogne ↔ Gare d'Austerlitz",
+            stops: ["Boulogne – Pont de Saint-Cloud", "Boulogne – Jean Jaurès", "Porte d'Auteuil", "Michel-Ange – Molitor", "Michel-Ange – Auteuil", "Chardon-Lagache", "Mirabeau", "Église d'Auteuil", "Javel – André Citroën", "Charles Michels", "Avenue Émile Zola", "La Motte-Picquet – Grenelle", "Ségur", "Duroc", "Vaneau", "Sèvres – Babylone", "Mabillon", "Odéon", "Cluny – La Sorbonne", "Maubert – Mutualité", "Cardinal Lemoine", "Jussieu", "Gare d'Austerlitz"]
         },
-        { 
-            id: "11", 
-            color: "#8D5E2A", 
-            textColor: "#ffffff",
-            name: "Châtelet ↔ Rosny-Bois-Perrier", 
-            stops: ["Châtelet", "Hôtel de Ville", "Rambuteau", "Arts et Métiers", "République", "Goncourt", "Belleville", "Pyrénées", "Jourdain", "Place des Fêtes", "Télégraphe", "Porte des Lilas", "Mairie des Lilas", "Serge Gainsbourg", "Romainville – Carnot", "Montreuil – Hôpital", "La Dhuys", "Coteaux Beauclair", "Rosny-Bois-Perrier"] 
+        {
+            id: "11",
+            color: "#8D5E2A",
+            text: "#FFFFFF",
+            route: "Châtelet ↔ Rosny-Bois-Perrier",
+            stops: ["Châtelet", "Hôtel de Ville", "Rambuteau", "Arts et Métiers", "République", "Goncourt", "Belleville", "Pyrénées", "Jourdain", "Place des Fêtes", "Télégraphe", "Porte des Lilas", "Mairie des Lilas", "Serge Gainsbourg", "Romainville – Carnot", "Montreuil – Hôpital", "La Dhuys", "Coteaux Beauclair", "Rosny-Bois-Perrier"]
         },
-        { 
-            id: "12", 
-            color: "#007852", 
-            textColor: "#ffffff",
-            name: "Mairie d'Issy ↔ Mairie d'Aubervilliers", 
-            stops: ["Mairie d'Issy", "Corentin Celton", "Porte de Versailles", "Convention", "Vaugirard", "Volontaires", "Pasteur", "Falguière", "Montparnasse – Bienvenüe", "Notre-Dame-des-Champs", "Rennes", "Sèvres – Babylone", "Rue du Bac", "Solférino", "Assemblée Nationale", "Concorde", "Madeleine", "Saint-Lazare", "Trinité – d'Estienne d'Orves", "Notre-Dame-de-Lorette", "Saint-Georges", "Pigalle", "Abbesses", "Lamarck – Caulaincourt", "Jules Joffrin", "Marcadet – Poissonniers", "Marx Dormoy", "Porte de la Chapelle", "Front Populaire", "Aimé Césaire", "Mairie d'Aubervilliers"] 
+        {
+            id: "12",
+            color: "#007852",
+            text: "#FFFFFF",
+            route: "Mairie d'Issy ↔ Mairie d'Aubervilliers",
+            stops: ["Mairie d'Issy", "Corentin Celton", "Porte de Versailles", "Convention", "Vaugirard", "Volontaires", "Pasteur", "Falguière", "Montparnasse – Bienvenüe", "Notre-Dame-des-Champs", "Rennes", "Sèvres – Babylone", "Rue du Bac", "Solférino", "Assemblée Nationale", "Concorde", "Madeleine", "Saint-Lazare", "Trinité – d'Estienne d'Orves", "Notre-Dame-de-Lorette", "Saint-Georges", "Pigalle", "Abbesses", "Lamarck – Caulaincourt", "Jules Joffrin", "Marcadet – Poissonniers", "Marx Dormoy", "Porte de la Chapelle", "Front Populaire", "Aimé Césaire", "Mairie d'Aubervilliers"]
         },
-        { 
-            id: "13", 
-            color: "#6EC4E8", 
-            textColor: "#1a1a1a",
-            name: "Châtillon ↔ Saint-Denis / Les Courtilles", 
-            stops: ["Châtillon – Montrouge", "Malakoff – Rue Étienne Dolet", "Malakoff – Plateau de Vanves", "Porte de Vanves", "Plaisance", "Pernety", "Gaîté", "Montparnasse – Bienvenüe", "Duroc", "Saint-François-Xavier", "Varenne", "Invalides", "Champs-Élysées – Clemenceau", "Miromesnil", "Saint-Lazare", "Liège", "Place de Clichy", "La Fourche", "Brochant", "Porte de Clichy", "Mairie de Clichy", "Gabriel Péri", "Les Agnettes", "Les Courtilles", "Guy Môquet", "Porte de Saint-Ouen", "Garibaldi", "Mairie de Saint-Denis", "Carrefour Pleyel", "Saint-Denis – Porte de Paris", "Basilique de Saint-Denis", "Saint-Denis – Université"] 
+        {
+            id: "13",
+            color: "#6EC4E8",
+            text: "#000000",
+            route: "Châtillon ↔ St-Denis / Les Courtilles",
+            stops: ["Châtillon – Montrouge", "Malakoff – Rue Étienne Dolet", "Malakoff – Plateau de Vanves", "Porte de Vanves", "Plaisance", "Pernety", "Gaîté", "Montparnasse – Bienvenüe", "Duroc", "Saint-François-Xavier", "Varenne", "Invalides", "Champs-Élysées – Clemenceau", "Miromesnil", "Saint-Lazare", "Liège", "Place de Clichy", "La Fourche", "Brochant", "Porte de Clichy", "Mairie de Clichy", "Gabriel Péri", "Les Agnettes", "Les Courtilles", "Guy Môquet", "Porte de Saint-Ouen", "Garibaldi", "Mairie de Saint-Denis", "Carrefour Pleyel", "Saint-Denis – Porte de Paris", "Basilique de Saint-Denis", "Saint-Denis – Université"]
         },
-        { 
-            id: "14", 
-            color: "#62259D", 
-            textColor: "#ffffff",
-            name: "Saint-Ouen ↔ Olympiades", 
-            stops: ["Mairie de Saint-Ouen", "Saint-Ouen", "Porte de Clichy", "Pont Cardinet", "Saint-Lazare", "Madeleine", "Pyramides", "Châtelet", "Gare de Lyon", "Bercy", "Cour Saint-Émilion", "Bibliothèque François Mitterrand", "Olympiades", "Maison Blanche", "Hôpital Bicêtre", "L'Haÿ-les-Roses", "Chevilly-Larue", "Thiais – Orly", "Aéroport d'Orly"] 
+        {
+            id: "14",
+            color: "#62259D",
+            text: "#FFFFFF",
+            route: "Saint-Denis Pleyel ↔ Aéroport d'Orly",
+            stops: ["Saint-Denis Pleyel", "Mairie de Saint-Ouen", "Saint-Ouen", "Porte de Clichy", "Pont Cardinet", "Saint-Lazare", "Madeleine", "Pyramides", "Châtelet", "Gare de Lyon", "Bercy", "Cour Saint-Émilion", "Bibliothèque François Mitterrand", "Olympiades", "Maison Blanche", "Hôpital Bicêtre", "L'Haÿ-les-Roses", "Chevilly-Larue", "Thiais – Orly", "Aéroport d'Orly"]
         }
     ];
 
-    // --- LOGICA DI GENERAZIONE ---
-
+    // --- GENERAZIONE HTML ---
     const app = document.getElementById('app');
-    const totalDisplay = document.getElementById('total-stops-display');
-    let globalStopCounter = 0;
+    const totalCountEl = document.getElementById('total-count');
+    let globalCounter = 0;
 
-    metroData.forEach(line => {
-        // Creazione Wrapper Linea
-        const wrapper = document.createElement('div');
-        wrapper.className = 'metro-line-wrapper';
+    lines.forEach(line => {
+        // Wrapper principale della linea
+        const lineCard = document.createElement('div');
+        lineCard.className = 'metro-line';
 
-        // Creazione Header Linea
+        // Header della linea
         const header = document.createElement('div');
         header.className = 'line-header';
-        header.onclick = () => toggleLine(wrapper);
+        header.onclick = () => toggleAccordion(lineCard);
 
-        // Badge Linea (Cerchio)
-        const badge = document.createElement('div');
-        badge.className = 'line-badge';
-        badge.style.backgroundColor = line.color;
-        badge.style.color = line.textColor;
-        badge.innerText = line.id;
+        // Cerchio con numero
+        const circle = document.createElement('div');
+        circle.className = 'line-circle';
+        circle.style.backgroundColor = line.color;
+        circle.style.color = line.text;
+        circle.innerText = line.id;
 
-        // Info Linea
-        const info = document.createElement('div');
-        info.className = 'line-info';
-        const title = document.createElement('span');
-        title.className = 'line-title';
-        title.innerText = `Ligne ${line.id}`;
+        // Dettagli testo
+        const details = document.createElement('div');
+        details.className = 'line-details';
         
-        const countSpan = document.createElement('div');
-        countSpan.className = 'line-stops-count';
-        countSpan.innerText = `${line.stops.length} Fermate`;
+        const name = document.createElement('span');
+        name.className = 'line-name';
+        name.innerText = `Ligne ${line.id}`;
+        
+        const route = document.createElement('span');
+        route.className = 'line-route';
+        route.innerText = line.route; // Mostra direzione
 
-        info.appendChild(title);
-        info.appendChild(countSpan);
+        details.appendChild(name);
+        details.appendChild(route);
 
-        // Freccia
-        const arrow = document.createElement('div');
-        arrow.className = 'arrow';
-        arrow.innerHTML = '&#9660;'; // Freccia giù
+        // Icona freccia (SVG)
+        const chevron = document.createElement('img');
+        chevron.className = 'chevron';
+        chevron.src = "data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E";
 
-        header.appendChild(badge);
-        header.appendChild(info);
-        header.appendChild(arrow);
+        header.appendChild(circle);
+        header.appendChild(details);
+        header.appendChild(chevron);
 
-        // Creazione Lista Fermate
-        const listContainer = document.createElement('div');
-        listContainer.className = 'stops-list';
+        // Lista fermate
+        const stopsContainer = document.createElement('div');
+        stopsContainer.className = 'stops-container';
+        
         const ul = document.createElement('ul');
+        ul.className = 'stops-list';
 
+        // Generazione lista fermate
         line.stops.forEach(stopName => {
-            globalStopCounter++; // Incrementa contatore globale
+            globalCounter++;
             const li = document.createElement('li');
-            li.innerHTML = `<span class="stop-number">#${globalStopCounter}</span> ${stopName}`;
+            li.className = 'stop-item';
+            
+            // Il pallino colorato accanto alla fermata
+            li.style.setProperty('--line-color', line.color); 
+            
+            li.innerHTML = `
+                <span>${stopName}</span>
+                <span class="stop-number">#${globalCounter}</span>
+            `;
             ul.appendChild(li);
         });
 
-        listContainer.appendChild(ul);
-        wrapper.appendChild(header);
-        wrapper.appendChild(listContainer);
-        app.appendChild(wrapper);
+        stopsContainer.appendChild(ul);
+        lineCard.appendChild(header);
+        lineCard.appendChild(stopsContainer);
+        app.appendChild(lineCard);
     });
 
-    // Aggiorna il contatore totale nell'header
-    totalDisplay.innerText = globalStopCounter;
+    // Aggiorna totale
+    totalCountEl.innerText = globalCounter;
 
     // Funzione Accordion
-    function toggleLine(element) {
-        element.classList.toggle('active');
-        const list = element.querySelector('.stops-list');
-        if (element.classList.contains('active')) {
-            list.style.maxHeight = list.scrollHeight + "px";
+    function toggleAccordion(card) {
+        const isActive = card.classList.contains('active');
+        const content = card.querySelector('.stops-container');
+        
+        // Chiudi tutte le altre (opzionale, se vuoi focus su una sola)
+        // document.querySelectorAll('.metro-line').forEach(c => {
+        //     c.classList.remove('active');
+        //     c.querySelector('.stops-container').style.maxHeight = null;
+        // });
+
+        if (!isActive) {
+            card.classList.add('active');
+            content.style.maxHeight = content.scrollHeight + "px";
         } else {
-            list.style.maxHeight = null;
+            card.classList.remove('active');
+            content.style.maxHeight = null;
         }
     }
 </script>
